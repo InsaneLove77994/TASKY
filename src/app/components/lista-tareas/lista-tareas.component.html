@@ -1,0 +1,22 @@
+<ion-list>
+  <ion-item-sliding *ngFor="let tarea of tareas">
+    <ion-item-options side="start" *ngIf="!tarea.completada">
+      <ion-item-option color="success" (click)="marcarTareaCompletada(tarea)">
+        <ion-icon name="checkmark-circle-sharp" slot="icon-only"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+
+    <ion-item (click)="abrirTarea(tarea)">
+      <ion-label>{{ tarea.titulo }}</ion-label>
+      <ion-note slot="end">{{
+        tarea.completada ? "Completada" : "Pendiente"
+      }}</ion-note>
+    </ion-item>
+
+    <ion-item-options side="end">
+      <ion-item-option color="danger" (click)="eliminarTarea(tarea)">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>

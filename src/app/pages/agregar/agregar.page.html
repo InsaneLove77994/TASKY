@@ -1,0 +1,30 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item>
+      <ion-input
+        label="Nuevo item"
+        type="text"
+        labelPlacement="floating"
+        placeholder="Ingresa el nombre"
+        [(ngModel)]="nombreTarea"
+        (keyup.enter)="agregarTarea()"
+      ></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-item-sliding *ngFor="let item of tareas; let i = index">
+    <ion-item-options side="end">
+      <ion-item-option color="danger" (click)="eliminarItem(i)">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-content>
+
+
