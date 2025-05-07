@@ -51,7 +51,7 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     public _tareasService: TareasService,
     private alertController: AlertController,
-    private categoriasService: CategoriasService // NUEVO
+    private categoriasService: CategoriasService 
   ) {}
 
   ngOnInit() {
@@ -89,14 +89,12 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   eliminarTarea(tarea: any) {
     this._tareasService.eliminarTarea(tarea);
   }
-
   obtenerNombreCategoria(categoriaId?: number): string {
-    if (!categoriaId) return 'Sin categoría';
-    const categoria = this.categoriasService.obtenerCategorias()
-      .find(cat => cat.id === categoriaId);
-    return categoria?.nombre || 'Sin categoría';
-  }
-  
+  if (!categoriaId) return 'Sin categoría';
+  const categoria = this.categoriasService.obtenerCategorias()
+    .find(cat => cat.id === categoriaId);
+  return categoria?.nombre || 'Sin categoría';
+}
 
   abrirTarea(tarea: any) {}
 }
