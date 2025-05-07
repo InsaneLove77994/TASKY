@@ -11,8 +11,11 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
+import { AlertInput } from '@ionic/angular';
 import { TareasService } from 'src/app/services/tareas.service';
 import { ListaTareasComponent } from '../../components/lista-tareas/lista-tareas.component';
+import { CategoriasService } from 'src/app/services/categorias.service';
+import { Categoria } from 'src/app/models/categoria.model';
 
 @Component({
   selector: 'app-tab1',
@@ -31,15 +34,60 @@ import { ListaTareasComponent } from '../../components/lista-tareas/lista-tareas
   ],
 })
 export class Tab1Page {
+  categorias: Categoria[] = [];
+
   constructor(
     public _tareasService: TareasService,
     private _router: Router,
-    private alertController: AlertController
-  ) {}
+    private alertController: AlertController,
+    private categoriasService: CategoriasService
+  ) {
+    this.categorias = this.categoriasService.obtenerCategorias();
+  }
 
+  
   async agregarTarea() {
-    const alerta = await this.alertController.create({
-      header: 'Nueva Tarea',
+    // Paso 1: pedir el nombre
+    const nombreAlert = await this.alertController.create({
+      header: 'Nueva tarea',
+      inputs: [
+        {
+          name: 'titulo',
+          type: 'text',
+          placeholder: 'Ingresa el nombre de la tarea',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Siguiente',
+          handler: (data) => {
+            const titulo = data.titulo?.trim();
+            if (titulo) {
+              this.presentarAlertaCategorias(titulo); // pasa el título a la siguiente alerta
+            }
+          },
+        },
+      ],
+    });
+  
+    await nombreAlert.present();
+  }
+  
+  async presentarAlertaCategorias(titulo: string) {
+    this.categorias = this.categoriasService.obtenerCategorias();
+    const inputs: AlertInput[] = this.categorias.map((cat) => ({
+      type: 'radio' as const,
+      label: cat.nombre,
+      value: cat.id,
+    }));
+  
+    const categoriaAlert = await this.alertController.create({
+      header: 'Selecciona una categoría',
+      inputs,
       buttons: [
         {
           text: 'Cancelar',
@@ -47,24 +95,23 @@ export class Tab1Page {
         },
         {
           text: 'Crear',
-          role: 'confirm',
-          handler: (data) => {
-            if (data.titulo.length === 0) {
-              return;
+          handler: (categoriaId) => {
+            if (categoriaId) {
+              // Obtener el nombre de la categoría seleccionada
+              const categoriaSeleccionada = this.categorias.find(
+                (cat) => cat.id === categoriaId
+              );
+  
+              // Pasar el nombre de la categoría al servicio
+              if (categoriaSeleccionada) {
+                this._tareasService.agregarTarea(titulo, categoriaId, categoriaSeleccionada.nombre);
+              }
             }
-            const listaID = this._tareasService.agregarTarea(data.titulo);
           },
         },
       ],
-      inputs: [
-        {
-          name: 'titulo',
-          placeholder: 'Ingresa un nombre',
-          type: 'text',
-        },
-      ],
     });
-
-    alerta.present();
+  
+    await categoriaAlert.present();
   }
 }

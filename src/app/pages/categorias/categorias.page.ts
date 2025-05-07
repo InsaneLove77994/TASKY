@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { Categoria } from 'src/app/models/categoria.model';
 
+
 @Component({
   selector: 'app-categorias',
   templateUrl: './categorias.page.html',
