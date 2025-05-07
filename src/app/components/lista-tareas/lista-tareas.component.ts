@@ -17,6 +17,9 @@ import {
   IonItemOptions,
   IonItemOption,
   IonIcon,
+  IonSelect,
+  IonSelectOption
+
 } from '@ionic/angular/standalone';
 import { TareasService } from 'src/app/services/tareas.service';
 import { AlertController } from '@ionic/angular/standalone';
@@ -37,6 +40,8 @@ import { CategoriasService } from 'src/app/services/categorias.service';
     IonItemOptions,
     IonItemOption,
     IonIcon,
+    IonSelect,
+    IonSelectOption,
     CommonModule,
   ],
   standalone: true,
@@ -46,6 +51,8 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(IonList) ionList!: IonList;
 
   tareas: any[] = [];
+  categorias: any[] = [];
+categoriaSeleccionada: number | null = null;
   tareasSub!: Subscription; //
 
   constructor(
@@ -55,7 +62,8 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.suscribirseATareas(); // NUEVO
+    this.categorias = this.categoriasService.obtenerCategorias();
+    this.suscribirseATareas();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -71,16 +79,26 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   suscribirseATareas() {
-    this.tareasSub = this._tareasService.obtenerTareas$().subscribe((todas) => {
-      this.tareas = todas.filter((t) => t.completada === this.completada);
+    this.tareasSub = this._tareasService.obtenerTareas$().subscribe(() => {
+      this.filtrarTareas();
     });
   }
+  
 
   filtrarTareas() {
     const todas = this._tareasService.obtenerTareas();
-    this.tareas = todas.filter((t) => t.completada === this.completada);
+    this.tareas = todas.filter(t =>
+      t.completada === this.completada &&
+      (this.categoriaSeleccionada === null || t.categoriaId === this.categoriaSeleccionada)
+    );
   }
+  
 
+
+  onCategoriaChange(event: any) {
+    this.categoriaSeleccionada = event.detail.value;
+    this.filtrarTareas();
+  }
   marcarTareaCompletada(tarea: any) {
     tarea.completada = !tarea.completada;
     this._tareasService.actualizarTarea(tarea);

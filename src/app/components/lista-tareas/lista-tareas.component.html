@@ -1,3 +1,19 @@
+<!-- Filtro por Categoría -->
+<ion-item>
+  <ion-label>Categoría</ion-label>
+  <ion-select
+    placeholder="Todas"
+    [value]="categoriaSeleccionada"
+    (ionChange)="onCategoriaChange($event)"
+  >
+    <ion-select-option [value]="null">Todas</ion-select-option>
+    <ion-select-option *ngFor="let cat of categorias" [value]="cat.id">
+      {{ cat.nombre }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+
+<!-- Lista de Tareas -->
 <ion-list>
   <ion-item-sliding *ngFor="let tarea of tareas">
     <ion-item-options side="start" *ngIf="!tarea.completada">
@@ -9,7 +25,6 @@
     <ion-item (click)="abrirTarea(tarea)">
       <ion-label>
         <h2>{{ tarea.titulo }}</h2>
-        
         <p>Categoría: {{ obtenerNombreCategoria(tarea.categoriaId) }}</p>
       </ion-label>
       <ion-note slot="end">
@@ -24,5 +39,6 @@
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
+
 
 
