@@ -17,6 +17,11 @@ export const routes: Routes = [
           import('../tab2/tab2.routes').then((m) => m.routes),
       },
       {
+        path: 'categorias',  // Nueva ruta para Categorías
+        loadChildren: () =>
+          import('../categorias/categorias.routes').then((m) => m.routes), // Cargar el archivo de rutas de Categorías
+      },
+      {
         path: '',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full',
@@ -29,3 +34,4 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
 ];
+

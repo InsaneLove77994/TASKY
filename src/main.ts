@@ -3,12 +3,13 @@ import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } 
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 
 import { addIcons } from "ionicons";
-import { close, bookmarkOutline, clipboardOutline, addOutline, createOutline } from "ionicons/icons";
+import { close, bookmarkOutline, clipboardOutline, addOutline, createOutline, folderOutline } from "ionicons/icons";
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 
-addIcons({close, bookmarkOutline, clipboardOutline, addOutline, createOutline})
+// Agregar los íconos a la lista global
+addIcons({close, bookmarkOutline, clipboardOutline, addOutline, createOutline, folderOutline})
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -17,3 +18,4 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withPreloading(PreloadAllModules)),
   ],
 });
+
