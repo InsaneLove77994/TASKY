@@ -25,6 +25,7 @@ import { TareasService } from 'src/app/services/tareas.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs'; // NUEVO
 import { CategoriasService } from 'src/app/services/categorias.service';
+import { FirebaseConfigService } from 'src/app/services/firebase-config.service';
 
 
 @Component({
@@ -56,14 +57,22 @@ categoriaSeleccionada: number | null = null;
   tareasSub!: Subscription; //
 
   constructor(
+
+    private firebaseConfigService : FirebaseConfigService,
+
     public _tareasService: TareasService,
     private alertController: AlertController,
     private categoriasService: CategoriasService 
   ) {}
 
+
+  showFeature = false;
+
   ngOnInit() {
     this.categorias = this.categoriasService.obtenerCategorias();
     this.suscribirseATareas();
+    this.firebaseConfigService.isFeatureEnabled('showNewFeature')
+    .then(flag => this.showFeature = flag);
   }
 
   ngOnChanges(changes: SimpleChanges) {

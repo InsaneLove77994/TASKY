@@ -14,7 +14,7 @@
 </ion-item>
 
 <!-- Lista de Tareas -->
-<ion-list>
+<ion-list *ngIf="showFeature">
   <ion-item-sliding *ngFor="let tarea of tareas">
     <ion-item-options side="start" *ngIf="!tarea.completada">
       <ion-item-option color="success" (click)="marcarTareaCompletada(tarea)">
