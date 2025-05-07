@@ -21,6 +21,8 @@ import {
 import { TareasService } from 'src/app/services/tareas.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs'; // NUEVO
+import { CategoriasService } from 'src/app/services/categorias.service';
+
 
 @Component({
   selector: 'app-lista-tareas',
@@ -48,7 +50,8 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     public _tareasService: TareasService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private categoriasService: CategoriasService // NUEVO
   ) {}
 
   ngOnInit() {
@@ -86,6 +89,14 @@ export class ListaTareasComponent implements OnInit, OnChanges, OnDestroy {
   eliminarTarea(tarea: any) {
     this._tareasService.eliminarTarea(tarea);
   }
+
+  obtenerNombreCategoria(categoriaId?: number): string {
+    if (!categoriaId) return 'Sin categoría';
+    const categoria = this.categoriasService.obtenerCategorias()
+      .find(cat => cat.id === categoriaId);
+    return categoria?.nombre || 'Sin categoría';
+  }
+  
 
   abrirTarea(tarea: any) {}
 }

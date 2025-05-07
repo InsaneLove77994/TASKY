@@ -7,10 +7,14 @@
     </ion-item-options>
 
     <ion-item (click)="abrirTarea(tarea)">
-      <ion-label>{{ tarea.titulo }}</ion-label>
-      <ion-note slot="end">{{
-        tarea.completada ? "Completada" : "Pendiente"
-      }}</ion-note>
+      <ion-label>
+        <h2>{{ tarea.titulo }}</h2>
+        
+        <p>Categoría: {{ obtenerNombreCategoria(tarea.categoriaId) }}</p>
+      </ion-label>
+      <ion-note slot="end">
+        {{ tarea.completada ? "Completada" : "Pendiente" }}
+      </ion-note>
     </ion-item>
 
     <ion-item-options side="end">
@@ -20,3 +24,5 @@
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
+
+

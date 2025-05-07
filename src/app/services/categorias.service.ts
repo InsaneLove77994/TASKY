@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Categoria } from '../models/categoria.model';
+import { TareasService } from './tareas.service'; 
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { Categoria } from '../models/categoria.model';
 export class CategoriasService {
   categorias: Categoria[] = [];
 
-  constructor() {
+  constructor(private tareasService: TareasService) {
     this.cargarCategorias();
   }
 
@@ -29,6 +30,9 @@ export class CategoriasService {
   eliminarCategoria(id: number) {
     this.categorias = this.categorias.filter(cat => cat.id !== id);
     this.guardarCategorias();
+
+    // Notificar al servicio de tareas para actualizar
+    this.tareasService.removerCategoriaDeTareas(id);
   }
 
   obtenerCategorias(): Categoria[] {

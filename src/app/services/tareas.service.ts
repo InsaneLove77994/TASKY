@@ -20,12 +20,21 @@ export class TareasService {
     return this.tareas;
   }
 
-  agregarTarea(titulo: string) {
-    const nuevaTarea = { id: Date.now(), titulo, completada: false };
+  agregarTarea(titulo: string, categoriaId?: number, categoriaNombre?: string) {
+    const nuevaTarea = {
+      id: Date.now(),
+      titulo,
+      completada: false,
+      categoriaId,
+      categoriaNombre  // Aquí agregamos el nombre de la categoría
+    };
+    
     this.tareas.push(nuevaTarea);
     this.guardarTareas();
     this.tareasSubject.next([...this.tareas]);
   }
+  
+  
 
   actualizarTarea(tarea: any) {
     const tareaIndex = this.tareas.findIndex((t) => t.id === tarea.id);
@@ -51,5 +60,15 @@ export class TareasService {
       this.tareas = JSON.parse(localStorage.getItem('tareas')!);
     }
     this.tareasSubject.next([...this.tareas]);
+  }
+
+  removerCategoriaDeTareas(categoriaId: number) {
+    this.tareas.forEach(tarea => {
+      if (tarea.categoriaId === categoriaId) {
+        tarea.categoriaId = null;
+        tarea.categoriaNombre = 'Sin categoría';
+      }
+    });
+    this.guardarTareas();
   }
 }
